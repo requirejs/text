@@ -1,6 +1,8 @@
 # text
 
-An AMD loader plugin, known to work in RequireJS, but should work in other
+An AMD loader plugin for loading text resources.
+
+Known to work in RequireJS, but should work in other
 AMD loaders that support the same loader plugin API.
 
 ## Docs
