@@ -164,7 +164,9 @@ define(['module'], function (module) {
                 text.get(url, function (content) {
                     text.finishLoad(name, parsed.strip, content, onLoad);
                 }, function (err) {
-                    onLoad.error(err);
+                    if (onLoad.error) {
+                        onLoad.error(err);
+                    }
                 });
             } else {
                 //Need to fetch the resource across domains. Assume
