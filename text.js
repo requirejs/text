@@ -124,7 +124,7 @@ define(['module'], function (module) {
             uHostName = uHostName[0];
 
             return (!uProtocol || uProtocol === protocol) &&
-                   (!uHostName || uHostName === hostname) &&
+                   (!uHostName || uHostName.toLowerCase() === hostname.toLowerCase()) &&
                    ((!uPort && !uHostName) || uPort === port);
         },
 
