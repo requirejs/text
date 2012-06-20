@@ -47,7 +47,9 @@ define(['module'], function (module) {
                 .replace(/[\b]/g, "\\b")
                 .replace(/[\n]/g, "\\n")
                 .replace(/[\t]/g, "\\t")
-                .replace(/[\r]/g, "\\r");
+                .replace(/[\r]/g, "\\r")
+                .replace(/[\u2028]/g, "\\u2028")
+                .replace(/[\u2029]/g, "\\u2029");
         },
 
         createXhr: function () {
