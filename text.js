@@ -50,7 +50,8 @@ define(['module'], function (module) {
                 .replace(/[\r]/g, "\\r");
         },
 
-        createXhr: function () {
+        createXhr: typeof masterConfig.createXhr === "function" ? 
+			masterConfig.createXhr : function () {
             //Would love to dump the ActiveX crap in here. Need IE 6 to die first.
             var xhr, i, progId;
             if (typeof XMLHttpRequest !== "undefined") {
