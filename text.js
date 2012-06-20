@@ -3,7 +3,7 @@
  * Available via the MIT or new BSD license.
  * see: http://github.com/requirejs/text for details
  */
-/*jslint */
+/*jslint regexp: true */
 /*global require: false, XMLHttpRequest: false, ActiveXObject: false,
   define: false, window: false, process: false, Packages: false,
   java: false, location: false */
@@ -52,13 +52,13 @@ define(['module'], function (module) {
                 .replace(/[\u2029]/g, "\\u2029");
         },
 
-        createXhr: function () {
+        createXhr: masterConfig.createXhr || function () {
             //Would love to dump the ActiveX crap in here. Need IE 6 to die first.
             var xhr, i, progId;
             if (typeof XMLHttpRequest !== "undefined") {
                 return new XMLHttpRequest();
             } else if (typeof ActiveXObject !== "undefined") {
-                for (i = 0; i < 3; i++) {
+                for (i = 0; i < 3; i += 1) {
                     progId = progIds[i];
                     try {
                         xhr = new ActiveXObject(progId);
