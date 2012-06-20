@@ -52,7 +52,8 @@ define(['module'], function (module) {
                 .replace(/[\u2029]/g, "\\u2029");
         },
 
-        createXhr: function () {
+        createXhr: typeof masterConfig.createXhr === "function" ? 
+			masterConfig.createXhr : function () {
             //Would love to dump the ActiveX crap in here. Need IE 6 to die first.
             var xhr, i, progId;
             if (typeof XMLHttpRequest !== "undefined") {
