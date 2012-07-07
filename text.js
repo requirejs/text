@@ -1,5 +1,5 @@
 /**
- * @license RequireJS text 2.0.0+ Copyright (c) 2010-2012, The Dojo Foundation All Rights Reserved.
+ * @license RequireJS text 2.0.1 Copyright (c) 2010-2012, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/requirejs/text for details
  */
@@ -19,11 +19,11 @@ define(['module'], function (module) {
         defaultHostName = hasLocation && location.hostname,
         defaultPort = hasLocation && (location.port || undefined),
         buildMap = [],
-        masterConfig = module.config(),
+        masterConfig = (module.config && module.config()) || {},
         text, fs;
 
     text = {
-        version: '2.0.0+',
+        version: '2.0.1',
 
         strip: function (content) {
             //Strips <?xml ...?> declarations so that external SVG and XML
