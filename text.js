@@ -233,34 +233,6 @@ define(['module'], function (module) {
             }
             callback(file);
         };
-    } else if (text.createXhr()) {
-        text.get = function (url, callback, errback) {
-            var xhr = text.createXhr();
-            xhr.open('GET', url, true);
-
-            //Allow overrides specified in config
-            if (masterConfig.onXhr) {
-                masterConfig.onXhr(xhr, url);
-            }
-
-            xhr.onreadystatechange = function (evt) {
-                var status, err;
-                //Do not explicitly handle errors, those should be
-                //visible via console output in the browser.
-                if (xhr.readyState === 4) {
-                    status = xhr.status;
-                    if (status > 399 && status < 600) {
-                        //An http 4xx or 5xx error. Signal an error.
-                        err = new Error(url + ' HTTP status: ' + status);
-                        err.xhr = xhr;
-                        errback(err);
-                    } else {
-                        callback(xhr.responseText);
-                    }
-                }
-            };
-            xhr.send(null);
-        };
     } else if (typeof Packages !== 'undefined') {
         //Why Java, why is this so awkward?
         text.get = function (url, callback) {
@@ -298,6 +270,34 @@ define(['module'], function (module) {
                 input.close();
             }
             callback(content);
+        };
+    } else if (text.createXhr()) {
+        text.get = function (url, callback, errback) {
+            var xhr = text.createXhr();
+            xhr.open('GET', url, true);
+
+            //Allow overrides specified in config
+            if (masterConfig.onXhr) {
+                masterConfig.onXhr(xhr, url);
+            }
+
+            xhr.onreadystatechange = function (evt) {
+                var status, err;
+                //Do not explicitly handle errors, those should be
+                //visible via console output in the browser.
+                if (xhr.readyState === 4) {
+                    status = xhr.status;
+                    if (status > 399 && status < 600) {
+                        //An http 4xx or 5xx error. Signal an error.
+                        err = new Error(url + ' HTTP status: ' + status);
+                        err.xhr = xhr;
+                        errback(err);
+                    } else {
+                        callback(xhr.responseText);
+                    }
+                }
+            };
+            xhr.send(null);
         };
     }
 
