@@ -107,7 +107,7 @@ build profile:
     optimizeAllPluginResources: true
 
 In some cases, you may want the text plugin to not try the .js resource, maybe
-because you hae configured CORS on the other server, and you know that only
+because you have configured CORS on the other server, and you know that only
 browsers that support CORS will be used. In that case you can use the
 [module config](http://requirejs.org/docs/api.html#config-moduleconfig)
 (requires RequireJS 2+) to override some of the basic logic the plugin uses to
