@@ -53,8 +53,7 @@ define(['module'], function (module) {
         },
 
         removeWhitespace: function (content) {
-            return content.replace(/ +(?= )/g,'')
-                .replace(/(\\r\\n|\\n|\\r)/gm,"");
+            return content.replace(/>\s+</g, "><");
         },
 
         createXhr: masterConfig.createXhr || function () {
@@ -189,11 +188,13 @@ define(['module'], function (module) {
 
         write: function (pluginName, moduleName, write, config) {
             if (buildMap.hasOwnProperty(moduleName)) {
-                var content = text.jsEscape(buildMap[moduleName]);
+                var content = buildMap[moduleName];
 
                 //Removes whitespace and line breaks
                 if (masterConfig.removeWhitespace)
                     content = text.removeWhitespace(content);
+
+                content = text.jsEscape(content);
 
                 write.asModule(pluginName + "!" + moduleName,
                                "define(function () { return '" +
