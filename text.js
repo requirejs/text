@@ -155,7 +155,7 @@ define(['module'], function (module) {
 
             masterConfig.isBuild = config.isBuild;
 
-            var parsed = text.parseName(name),
+            var parsed = this.parseName(name),
                 nonStripName = parsed.moduleName + '.' + parsed.ext,
                 url = req.toUrl(nonStripName),
                 useXhr = (masterConfig.useXhr) ||
