@@ -23,7 +23,7 @@ define(['module'], function (module) {
         masterConfig = (module.config && module.config()) || {};
 
     text = {
-        version: '2.0.3',
+        version: '2.0.4',
 
         strip: function (content) {
             //Strips <?xml ...?> declarations so that external SVG and XML
