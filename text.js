@@ -251,9 +251,18 @@ define(['module'], function (module) {
         };
     } else if (masterConfig.env === 'xhr' || (!masterConfig.env &&
             text.createXhr())) {
-        text.get = function (url, callback, errback) {
-            var xhr = text.createXhr();
+        text.get = function (url, callback, errback, headers) {
+            var xhr = text.createXhr(), header;
             xhr.open('GET', url, true);
+
+            //Allow plugins direct access to xhr headers
+            if (headers) {
+                for (header in headers) {
+                    if (headers.hasOwnProperty(header)) {
+                        xhr.setRequestHeader(header.toLowerCase(), headers[header]);
+                    }
+                }
+            }
 
             //Allow overrides specified in config
             if (masterConfig.onXhr) {
