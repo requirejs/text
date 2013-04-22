@@ -125,7 +125,7 @@ requirejs.config({
                 //port: port of page text.js is running on
                 //Use protocol, hostname, and port to compare against the url
                 //being requested.
-                //Return true of false. true means "use xhr", false means
+                //Return true or false. true means "use xhr", false means
                 //"fetch the .js version of this resource".
             }
         }
