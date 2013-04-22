@@ -154,6 +154,10 @@ requirejs.config({
                 //Overrides the creation of the XHR object. Return an XHR
                 //object from this function.
                 //Available in text.js 2.0.1 or later.
+            },
+            onXhrComplete: function (xhr, url) {
+                //Called whenever an XHR has completed its work. Useful
+                //if browser-specific xhr cleanup needs to be done.
             }
         }
     }
