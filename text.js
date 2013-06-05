@@ -242,16 +242,18 @@ define(['module'], function (module) {
         fs = require.nodeRequire('fs');
 
         text.get = function (url, callback, errback) {
-            try {
-                var file = fs.readFileSync(url, 'utf8');
+            fs.readFile(url, function (err, buffer) {
+                if (err) {
+                    return errback(err);
+                }
+
+                var file = buffer.toString('utf8');
                 //Remove BOM (Byte Mark Order) from utf8 files if it is there.
                 if (file.indexOf('\uFEFF') === 0) {
                     file = file.substring(1);
                 }
                 callback(file);
-            } catch (error) {
-                errback(error);
-            }
+            });
         };
     } else if (masterConfig.env === 'xhr' || (!masterConfig.env &&
             text.createXhr())) {
