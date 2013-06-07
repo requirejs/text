@@ -19,7 +19,7 @@ define(['module'], function (module) {
         defaultProtocol = hasLocation && location.protocol && location.protocol.replace(/\:/, ''),
         defaultHostName = hasLocation && location.hostname,
         defaultPort = hasLocation && (location.port || undefined),
-        buildMap = [],
+        buildMap = {},
         masterConfig = (module.config && module.config()) || {};
 
     text = {
