@@ -241,13 +241,19 @@ define(['module'], function (module) {
         //Using special require.nodeRequire, something added by r.js.
         fs = require.nodeRequire('fs');
 
-        text.get = function (url, callback) {
-            var file = fs.readFileSync(url, 'utf8');
-            //Remove BOM (Byte Mark Order) from utf8 files if it is there.
-            if (file.indexOf('\uFEFF') === 0) {
-                file = file.substring(1);
-            }
-            callback(file);
+        text.get = function (url, callback, errback) {
+            fs.readFile(url, function (err, buffer) {
+                if (err) {
+                    return errback(err);
+                }
+
+                var file = buffer.toString('utf8');
+                //Remove BOM (Byte Mark Order) from utf8 files if it is there.
+                if (file.indexOf('\uFEFF') === 0) {
+                    file = file.substring(1);
+                }
+                callback(file);
+            });
         };
     } else if (masterConfig.env === 'xhr' || (!masterConfig.env &&
             text.createXhr())) {
