@@ -1,5 +1,5 @@
 /**
- * @license RequireJS text 2.0.6 Copyright (c) 2010-2012, The Dojo Foundation All Rights Reserved.
+ * @license RequireJS text 2.0.6+ Copyright (c) 2010-2012, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/requirejs/text for details
  */
@@ -23,7 +23,7 @@ define(['module'], function (module) {
         masterConfig = (module.config && module.config()) || {};
 
     text = {
-        version: '2.0.6',
+        version: '2.0.6+',
 
         strip: function (content) {
             //Strips <?xml ...?> declarations so that external SVG and XML
@@ -317,7 +317,9 @@ define(['module'], function (module) {
                     line = line.substring(1);
                 }
 
-                stringBuffer.append(line);
+                if (line !== null) {
+                    stringBuffer.append(line);
+                }
 
                 while ((line = input.readLine()) !== null) {
                     stringBuffer.append(lineSeparator);
