@@ -238,7 +238,9 @@ define(['module'], function (module) {
             typeof process !== "undefined" &&
             process.versions &&
             !!process.versions.node &&
-            !process.versions['node-webkit'])) {
+            //Make sure it's not node-webkit and regular require
+            !(!!process.versions['node-webkit'] &&
+                require.nodeRequire === undefined))) {
         //Using special require.nodeRequire, something added by r.js.
         fs = require.nodeRequire('fs');
 
