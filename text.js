@@ -1,5 +1,5 @@
 /**
- * @license RequireJS text 2.0.7 Copyright (c) 2010-2012, The Dojo Foundation All Rights Reserved.
+ * @license RequireJS text 2.0.8 Copyright (c) 2010-2012, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/requirejs/text for details
  */
@@ -11,7 +11,7 @@
 define(['module'], function (module) {
     'use strict';
 
-    var text, fs, Cc, Ci,
+    var text, fs, Cc, Ci, xpcIsWindows,
         progIds = ['Msxml2.XMLHTTP', 'Microsoft.XMLHTTP', 'Msxml2.XMLHTTP.4.0'],
         xmlRegExp = /^\s*<\?xml(\s)+version=[\'\"](\d)*.(\d)*[\'\"](\s)*\?>/im,
         bodyRegExp = /<body[^>]*>\s*([\s\S]+)\s*<\/body>/im,
@@ -23,7 +23,7 @@ define(['module'], function (module) {
         masterConfig = (module.config && module.config()) || {};
 
     text = {
-        version: '2.0.7',
+        version: '2.0.8',
 
         strip: function (content) {
             //Strips <?xml ...?> declarations so that external SVG and XML
@@ -343,11 +343,17 @@ define(['module'], function (module) {
         Cc = Components.classes,
         Ci = Components.interfaces;
         Components.utils['import']('resource://gre/modules/FileUtils.jsm');
+        xpcIsWindows = ('@mozilla.org/windows-registry-key;1' in Cc);
 
         text.get = function (url, callback) {
-            var inStream, convertStream,
-                readData = {},
-                fileObj = new FileUtils.File(url);
+            var inStream, convertStream, fileObj,
+                readData = {};
+
+            if (xpcIsWindows) {
+                url = url.replace(/\//g, '\\');
+            }
+
+            fileObj = new FileUtils.File(url);
 
             //XPCOM, you so crazy
             try {
