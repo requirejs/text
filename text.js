@@ -237,7 +237,8 @@ define(['module'], function (module) {
     if (masterConfig.env === 'node' || (!masterConfig.env &&
             typeof process !== "undefined" &&
             process.versions &&
-            !!process.versions.node)) {
+            !!process.versions.node &&
+            !process.versions['node-webkit'])) {
         //Using special require.nodeRequire, something added by r.js.
         fs = require.nodeRequire('fs');
 
