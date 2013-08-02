@@ -28,7 +28,7 @@ can be hard to manage, particularly for multi-line HTML.
 The text.js AMD loader plugin can help with this issue. It will automatically be
 loaded if the text! prefix is used for a dependency. Download the plugin and put
 it in the app's [baseUrl](http://requirejs.org/docs/api.html#config-baseUrl)
-directory.
+directory (or use the [paths config](http://requirejs.org/docs/api.html#config-paths) to place it in other areas).
 
 You can specify a text file resource as a dependency like so:
 
