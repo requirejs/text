@@ -176,6 +176,12 @@ define(['module'], function (module) {
                 useXhr = (masterConfig.useXhr) ||
                          text.useXhr;
 
+            // Do not load if it is an empty: url
+            if (url.indexOf('empty:') === 0) {
+                onLoad();
+                return;
+            }
+
             //Load the text. Use XHR if possible and in a browser.
             if (!hasLocation || useXhr(url, defaultProtocol, defaultHostName, defaultPort)) {
                 text.get(url, function (content) {
