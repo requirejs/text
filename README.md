@@ -155,6 +155,16 @@ requirejs.config({
                 //object from this function.
                 //Available in text.js 2.0.1 or later.
             },
+            openXhr: function (xhr, url) {
+                //Called when XHR is already created but not opended
+                //call xhr.open('GET', url, true)
+                //Useful for various things:
+                //translations (adding 'en' prefix to url)
+                //cross-domain (IE can't handle cross-domain resource
+                //              and need to be proxied)
+                //xhr: the xhr object
+                //url: the url that is going to be fetched.
+            },
             onXhrComplete: function (xhr, url) {
                 //Called whenever an XHR has completed its work. Useful
                 //if browser-specific xhr cleanup needs to be done.

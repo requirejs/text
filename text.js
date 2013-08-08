@@ -75,6 +75,22 @@ define(['module'], function (module) {
         },
 
         /**
+         * Opens Xhr.
+         * You can change url or method.
+         * It's useful for translated resources or when dealing with 
+         * cross-domain-requests for IE versions < 10
+         * which don't support proper headers.
+         * http://en.wikipedia.org/wiki/Cross-origin_resource_sharing
+         * Normaly it's just:
+         * xhr.open('GET', url, true);
+         * @param {Object} xhr object
+         * @param {String} url to fetch
+         */
+        openXhr: masterConfig.openXhr || function(xhr, url){
+            xhr.open('GET', url, true);
+        },
+
+        /**
          * Parses a resource name into its component parts. Resource names
          * look like: module/name.ext!strip, where the !strip part is
          * optional.
@@ -264,7 +280,7 @@ define(['module'], function (module) {
             text.createXhr())) {
         text.get = function (url, callback, errback, headers) {
             var xhr = text.createXhr(), header;
-            xhr.open('GET', url, true);
+            text.openXhr(xhr, url);
 
             //Allow plugins direct access to xhr headers
             if (headers) {
