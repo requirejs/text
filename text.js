@@ -55,7 +55,10 @@ define(['module'], function (module) {
         createXhr: masterConfig.createXhr || function () {
             //Would love to dump the ActiveX crap in here. Need IE 6 to die first.
             var xhr, i, progId;
-            if (typeof XMLHttpRequest !== "undefined") {
+            if (typeof XDomainRequest !== "undefined") {
+                return new XDomainRequest();
+            }
+            else if (typeof XMLHttpRequest !== "undefined") {
                 return new XMLHttpRequest();
             } else if (typeof ActiveXObject !== "undefined") {
                 for (i = 0; i < 3; i += 1) {
@@ -280,27 +283,42 @@ define(['module'], function (module) {
                 masterConfig.onXhr(xhr, url);
             }
 
-            xhr.onreadystatechange = function (evt) {
-                var status, err;
-                //Do not explicitly handle errors, those should be
-                //visible via console output in the browser.
-                if (xhr.readyState === 4) {
-                    status = xhr.status;
-                    if (status > 399 && status < 600) {
-                        //An http 4xx or 5xx error. Signal an error.
-                        err = new Error(url + ' HTTP status: ' + status);
-                        err.xhr = xhr;
-                        errback(err);
-                    } else {
-                        callback(xhr.responseText);
-                    }
+            // XDomainRequest support for IE
+            if (typeof XDomainRequest !== "undefined" && xhr instanceof XDomainRequest) {
+                xhr.onload = function() {
+                    callback(xhr.responseText);
+                };
 
-                    if (masterConfig.onXhrComplete) {
-                        masterConfig.onXhrComplete(xhr, url);
+                xhr.onerror = function() {
+                    err = new Error(url);
+                    err.xhr = xhr;
+                    errback(err);
+                };
+
+                xhr.send();
+            } else {
+                xhr.onreadystatechange = function (evt) {
+                    var status, err;
+                    //Do not explicitly handle errors, those should be
+                    //visible via console output in the browser.
+                    if (xhr.readyState === 4) {
+                        status = xhr.status;
+                        if (status > 399 && status < 600) {
+                            //An http 4xx or 5xx error. Signal an error.
+                            err = new Error(url + ' HTTP status: ' + status);
+                            err.xhr = xhr;
+                            errback(err);
+                        } else {
+                            callback(xhr.responseText);
+                        }
+
+                        if (masterConfig.onXhrComplete) {
+                            masterConfig.onXhrComplete(xhr, url);
+                        }
                     }
-                }
-            };
-            xhr.send(null);
+                };
+                xhr.send(null);
+            }
         };
     } else if (masterConfig.env === 'rhino' || (!masterConfig.env &&
             typeof Packages !== 'undefined' && typeof java !== 'undefined')) {
