@@ -121,11 +121,9 @@ define(['module'], function (module) {
 
             temp = ext || modName;
             index = temp.indexOf("!");
+            
             var dontExp;
             dontExp = ((dontExp = temp.split('!export').join('')) == temp) ? temp : dontExp;
-
-
-
             if (dontExp != temp) {
                 temp = dontExp;
                 dontExp = false;
@@ -133,7 +131,6 @@ define(['module'], function (module) {
 
             var dontStrip;
             dontStrip = ((dontStrip = temp.split('!strip').join('')) == temp) ? temp : dontStrip;
-
             if (dontStrip != temp) {
                 temp = dontStrip;
                 dontStrip = false;
