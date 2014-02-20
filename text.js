@@ -53,8 +53,11 @@ define(['module'], function (module) {
                 exports = matches.length ? {} : null;
                 for (_i = 0, _len = matches.length; _i < _len; _i++) {
                     match = matches[_i];
-                    var exportName = match.match(/(<!--\s*?export\s*?name\:")(.*?)\"\s*?-->/).slice(-1)[0];
-                    exports[exportName] = match.replace(/<!--\s*?export[^>]*>/, '');
+                    var exportName = match.match(/(<!--\s*?export\s*?name\:")(.*?)\"\s*?-->/);
+                    if (typeof exportName !== "undefined" && exportName !== null && exportName != "") {
+                        exportName = exportName.slice(-1)[0]
+                        exports[exportName] = match.replace(/<!--\s*?export[^>]*>/, '');
+                    }
                 }
             }
             return exports;
@@ -179,11 +182,9 @@ define(['module'], function (module) {
         },
 
         finishLoad: function (name, extra, content, onLoad) {
+            content = extra.strip ? text.strip(content) : content;
             var exports = extra.exp ? text.exp(content, name) : content;
-            if (exports == null)
-                content = extra.strip ? text.strip(content) : content;
-            else
-                content = exports;
+            content = exports || content;
             if (masterConfig.isBuild) {
                 buildMap[name] = content;
             }
