@@ -13,6 +13,7 @@ define(['module'], function (module) {
 
     var text, fs, Cc, Ci, xpcIsWindows,
         progIds = ['Msxml2.XMLHTTP', 'Microsoft.XMLHTTP', 'Msxml2.XMLHTTP.4.0'],
+        exportRegExp = /<!--\s*?export[^>]*>([\s\S]*?)(?=<!--\s*?export[^>]*>)|(?:<!--\s*?export[^>]*>[\s\S]*)/g,
         xmlRegExp = /^\s*<\?xml(\s)+version=[\'\"](\d)*.(\d)*[\'\"](\s)*\?>/im,
         bodyRegExp = /<body[^>]*>\s*([\s\S]+)\s*<\/body>/im,
         hasLocation = typeof location !== 'undefined' && location.href,
@@ -39,6 +40,24 @@ define(['module'], function (module) {
                 content = "";
             }
             return content;
+        },
+        exp: function (content) {
+            //finds all <!-- export name:"" --> declarations so that
+            //the module will export strings found until the next 
+            //export comment or until the end of document with the 
+            //name:"" attribute being the property of the exported object
+            var exports = null;
+            if (content) {
+                var matches = content.match(exportRegExp) || [],
+                    match, _i, _len;
+                exports = matches.length ? {} : null;
+                for (_i = 0, _len = matches.length; _i < _len; _i++) {
+                    match = matches[_i];
+                    var exportName = match.match(/(<!--\s*?export\s*?name\:")(.*?)\"\s*?-->/).slice(-1)[0];
+                    exports[exportName] = match.replace(/<!--\s*?export[^>]*>/, '');
+                }
+            }
+            return exports;
         },
 
         jsEscape: function (content) {
@@ -76,11 +95,11 @@ define(['module'], function (module) {
 
         /**
          * Parses a resource name into its component parts. Resource names
-         * look like: module/name.ext!strip, where the !strip part is
+         * look like: module/name.ext!strip, where the !strip and !export part is
          * optional.
          * @param {String} name the resource name
-         * @returns {Object} with properties "moduleName", "ext" and "strip"
-         * where strip is a boolean.
+         * @returns {Object} with properties "moduleName", "ext" and "extra"
+         * where extra is an object with strip and exp as boolean properties.
          */
         parseName: function (name) {
             var modName, ext, temp,
@@ -98,10 +117,25 @@ define(['module'], function (module) {
 
             temp = ext || modName;
             index = temp.indexOf("!");
-            if (index !== -1) {
-                //Pull off the strip arg.
-                strip = temp.substring(index + 1) === "strip";
-                temp = temp.substring(0, index);
+            var dontExp;
+            dontExp = ((dontExp = temp.split('!export').join('')) == temp) ? temp : dontExp;
+
+
+
+            if (dontExp != temp) {
+                temp = dontExp;
+                dontExp = false;
+            }
+
+            var dontStrip;
+            dontStrip = ((dontStrip = temp.split('!strip').join('')) == temp) ? temp : dontStrip;
+
+            if (dontStrip != temp) {
+                temp = dontStrip;
+                dontStrip = false;
+            }
+
+            if (!dontExp || !dontStrip) {
                 if (ext) {
                     ext = temp;
                 } else {
@@ -112,7 +146,7 @@ define(['module'], function (module) {
             return {
                 moduleName: modName,
                 ext: ext,
-                strip: strip
+                extra: { strip: !dontStrip, exp: !dontExp }
             };
         },
 
@@ -144,12 +178,17 @@ define(['module'], function (module) {
                    ((!uPort && !uHostName) || uPort === port);
         },
 
-        finishLoad: function (name, strip, content, onLoad) {
-            content = strip ? text.strip(content) : content;
+        finishLoad: function (name, extra, content, onLoad) {
+            var exports = extra.exp ? text.exp(content, name) : content;
+            if (exports == null)
+                content = extra.strip ? text.strip(content) : content;
+            else
+                content = exports;
             if (masterConfig.isBuild) {
                 buildMap[name] = content;
             }
             onLoad(content);
+            return content;
         },
 
         load: function (name, req, onLoad, config) {
@@ -185,7 +224,7 @@ define(['module'], function (module) {
             //Load the text. Use XHR if possible and in a browser.
             if (!hasLocation || useXhr(url, defaultProtocol, defaultHostName, defaultPort)) {
                 text.get(url, function (content) {
-                    text.finishLoad(name, parsed.strip, content, onLoad);
+                    text.finishLoad(name, parsed.extra, content, onLoad);
                 }, function (err) {
                     if (onLoad.error) {
                         onLoad.error(err);
@@ -198,18 +237,41 @@ define(['module'], function (module) {
                 //!strip part to avoid file system issues.
                 req([nonStripName], function (content) {
                     text.finishLoad(parsed.moduleName + '.' + parsed.ext,
-                                    parsed.strip, content, onLoad);
+                                    parsed.extra, content, onLoad);
                 });
             }
         },
 
         write: function (pluginName, moduleName, write, config) {
+            pluginName = pluginName.split('port').join('');
             if (buildMap.hasOwnProperty(moduleName)) {
-                var content = text.jsEscape(buildMap[moduleName]);
-                write.asModule(pluginName + "!" + moduleName,
+                var content = buildMap[moduleName];
+                if (typeof (content) != 'string') {
+                    var keys = Object.keys(content)
+                    var key, _i, _len;
+
+                    for (_i = 0, _len = keys.length; _i < _len; _i++) {
+                        key = keys[_i];
+                        content[key] = content[key];
+                    }
+                    content = JSON.stringify(content);
+                }
+                else {
+                    content = text.jsEscape(content);
+                }
+                var doesExport = moduleName.indexOf('!export') != -1;
+                if (!doesExport) {
+                    write.asModule(pluginName + "!" + moduleName,
                                "define(function () { return '" +
                                    content +
                                "';});\n");
+                } else {
+                    write.asModule(pluginName + "!" + moduleName,
+                               "define(function () { return " +
+                                   content +
+                               ";});\n");
+
+                }
             }
         },
 
