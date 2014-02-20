@@ -13,7 +13,7 @@ define(['module'], function (module) {
 
     var text, fs, Cc, Ci, xpcIsWindows,
         progIds = ['Msxml2.XMLHTTP', 'Microsoft.XMLHTTP', 'Msxml2.XMLHTTP.4.0'],
-        exportRegExp = /<!--\s*?export\s*?name[^>]*>([\s\S]*?)(?=<!--\s*?export[^>]*>)|(?:<!--\s*?export\s*?name[^>]*>[\s\S]*)/g,
+        exportRegExp = /(<!--\s*?export\s+?name[\:\=]([\'\"])[a-zA-Z]+?\w*?\2\s*?-->)[\s\S]+?((?=<!--\s*?export(\s+?name[\:\=]([\'\"])[a-zA-Z]+?\w*?\5)?\s*?-->)|(?:.(?![.\S\s])))/g,
         xmlRegExp = /^\s*<\?xml(\s)+version=[\'\"](\d)*.(\d)*[\'\"](\s)*\?>/im,
         bodyRegExp = /<body[^>]*>\s*([\s\S]+)\s*<\/body>/im,
         hasLocation = typeof location !== 'undefined' && location.href,
