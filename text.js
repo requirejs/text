@@ -13,7 +13,7 @@ define(['module'], function (module) {
 
     var text, fs, Cc, Ci, xpcIsWindows,
         progIds = ['Msxml2.XMLHTTP', 'Microsoft.XMLHTTP', 'Msxml2.XMLHTTP.4.0'],
-        exportRegExp = /<!--\s*?export[^>]*>([\s\S]*?)(?=<!--\s*?export[^>]*>)|(?:<!--\s*?export[^>]*>[\s\S]*)/g,
+        exportRegExp = /<!--\s*?export\s*?name[^>]*>([\s\S]*?)(?=<!--\s*?export[^>]*>)|(?:<!--\s*?export\s*?name[^>]*>[\s\S]*)/g,
         xmlRegExp = /^\s*<\?xml(\s)+version=[\'\"](\d)*.(\d)*[\'\"](\s)*\?>/im,
         bodyRegExp = /<body[^>]*>\s*([\s\S]+)\s*<\/body>/im,
         hasLocation = typeof location !== 'undefined' && location.href,
@@ -46,6 +46,9 @@ define(['module'], function (module) {
             //the module will export strings found until the next 
             //export comment or until the end of document with the 
             //name:"" attribute being the property of the exported object
+            //if no name attribute exists, then it will not be exported
+            //so an empty export can be used to end a previous export
+            //without creating a new one
             var exports = null;
             if (content) {
                 var matches = content.match(exportRegExp) || [],
@@ -53,11 +56,9 @@ define(['module'], function (module) {
                 exports = matches.length ? {} : null;
                 for (_i = 0, _len = matches.length; _i < _len; _i++) {
                     match = matches[_i];
-                    var exportName = match.match(/(<!--\s*?export\s*?name\:")(.*?)\"\s*?-->/);
-                    if (typeof exportName !== "undefined" && exportName !== null && exportName != "") {
-                        exportName = exportName.slice(-1)[0]
-                        exports[exportName] = match.replace(/<!--\s*?export[^>]*>/, '');
-                    }
+                    var exportName = match.match(/(<!--\s*?export\s*?name[\:\=]")(.*?)\"\s*?-->/);
+                    exportName = exportName.slice(-1)[0]
+                    exports[exportName] = match.replace(/<!--\s*?export[^>]*>/, '');
                 }
             }
             return exports;
