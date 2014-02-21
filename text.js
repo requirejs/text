@@ -210,8 +210,8 @@ define(['module'], function (module) {
 
         write: function (pluginName, moduleName, write, config) {
             if (buildMap.hasOwnProperty(moduleName)) {
-                var content = text.jsEscape(buildMap[moduleName]);
-                content = text.spaceless(content);
+                var content = text.spaceless(buildMap[moduleName]);
+                content = text.jsEscape(content);
                 write.asModule(pluginName + "!" + moduleName,
                                "define(function () { return '" +
                                    content +
