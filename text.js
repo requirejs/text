@@ -52,6 +52,10 @@ define(['module'], function (module) {
                 .replace(/[\u2029]/g, "\\u2029");
         },
 
+        spaceless: function (content) {
+            return content.replace(/>\s+</g, '><');
+        },
+
         createXhr: masterConfig.createXhr || function () {
             //Would love to dump the ActiveX crap in here. Need IE 6 to die first.
             var xhr, i, progId;
@@ -206,6 +210,7 @@ define(['module'], function (module) {
         write: function (pluginName, moduleName, write, config) {
             if (buildMap.hasOwnProperty(moduleName)) {
                 var content = text.jsEscape(buildMap[moduleName]);
+                content = text.spaceless(content);
                 write.asModule(pluginName + "!" + moduleName,
                                "define(function () { return '" +
                                    content +
