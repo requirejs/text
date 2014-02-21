@@ -53,7 +53,8 @@ define(['module'], function (module) {
         },
 
         spaceless: function (content) {
-            return content.replace(/>\s+</g, '><');
+            return content.replace(/>\s+</g, '><')
+                .replace(/^\s+|\s+$/g, '');
         },
 
         createXhr: masterConfig.createXhr || function () {
