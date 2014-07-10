@@ -55,7 +55,7 @@ define(['module'], function (module) {
         createXhr: masterConfig.createXhr || function () {
             //Would love to dump the ActiveX crap in here. Need IE 6 to die first.
             var xhr, i, progId;
-            if (typeof XMLHttpRequest !== "undefined") {
+            if (!(typeof ActiveXObject !== "undefined" && /file\:/i.test(location.protocol)) && (typeof XMLHttpRequest !== "undefined")) {
                 return new XMLHttpRequest();
             } else if (typeof ActiveXObject !== "undefined") {
                 for (i = 0; i < 3; i += 1) {
