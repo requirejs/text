@@ -252,7 +252,7 @@ define(['module'], function (module) {
             try {
                 var file = fs.readFileSync(url, 'utf8');
                 //Remove BOM (Byte Mark Order) from utf8 files if it is there.
-                if (file.indexOf('\uFEFF') === 0) {
+                if (file[0] === '\uFEFF') {
                     file = file.substring(1);
                 }
                 callback(file);
