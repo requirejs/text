@@ -109,6 +109,10 @@ define(['module'], function (module) {
                 }
             }
 
+            if (masterConfig.secondaryParseModuleName) {
+                modName = masterConfig.secondaryParseModuleName(modName);
+            }
+
             return {
                 moduleName: modName,
                 ext: ext,
