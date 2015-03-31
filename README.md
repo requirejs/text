@@ -164,7 +164,7 @@ requirejs.config({
 });
 ```
 
-### Forcing the environment implemention
+### Forcing the environment implementation
 
 The text plugin tries to detect what environment it is available for loading
 text resources, Node, XMLHttpRequest (XHR) or Rhino, but sometimes the
