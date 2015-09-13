@@ -18,6 +18,10 @@ It can also be installed using [volo](https://github.com/volojs/volo):
 
     volo add requirejs/text
 
+It can also be installed using [npm](https://www.npmjs.com/package/requirejs-text):
+
+    npm install rqeuirejs-text --save
+
 ## Usage
 
 It is nice to build HTML using regular HTML tags, instead of building up DOM
