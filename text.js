@@ -202,6 +202,10 @@ define(['module'], function (module) {
             //Load the text. Use XHR if possible and in a browser.
             if (!hasLocation || useXhr(url, defaultProtocol, defaultHostName, defaultPort)) {
                 text.get(url, function (content) {
+                    if (config && config.isBuild && config.onBuildRead) {
+                        content = config.onBuildRead(name, url, content);
+                    }
+
                     text.finishLoad(name, parsed.strip, content, onLoad);
                 }, function (err) {
                     if (onLoad.error) {
