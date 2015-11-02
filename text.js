@@ -311,12 +311,20 @@ define(['module'], function (module) {
             typeof Packages !== 'undefined' && typeof java !== 'undefined')) {
         //Why Java, why is this so awkward?
         text.get = function (url, callback) {
-            var stringBuffer, line,
+            var stringBuffer, line, input, stream,
                 encoding = "utf-8",
-                file = new java.io.File(url),
                 lineSeparator = java.lang.System.getProperty("line.separator"),
-                input = new java.io.BufferedReader(new java.io.InputStreamReader(new java.io.FileInputStream(file), encoding)),
                 content = '';
+
+            // If a class loader has been set on the global scope, we can use it
+            if (classLoader && url.indexOf("classpath:") === 0) {
+                stream = classLoader.getResourceAsStream(url.substring("classpath:".length))
+            } else {
+                var file = new java.io.File(url);
+                stream = new java.io.FileInputStream(file)
+            }
+            input = new java.io.BufferedReader(new java.io.InputStreamReader(stream, encoding));
+
             try {
                 stringBuffer = new java.lang.StringBuffer();
                 line = input.readLine();
