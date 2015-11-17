@@ -18,6 +18,10 @@ It can also be installed using [volo](https://github.com/volojs/volo):
 
     volo add requirejs/text
 
+If using npm:
+
+    npm install requirejs/text
+
 ## Usage
 
 It is nice to build HTML using regular HTML tags, instead of building up DOM
