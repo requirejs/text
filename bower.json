@@ -1,5 +1,22 @@
 {
   "name": "text",
-  "version": "2.0.14",
-  "main": "text.js"
+  "version": "2.1.14",
+  "main": [
+    "text.js",
+    "text.min.js"
+  ],
+  "homepage": "https://github.com/yalishizhude/text",
+  "authors": [
+    "亚里士朱德 <yalishizhude@163.com>"
+  ],
+  "description": "requirejs plugin",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }
