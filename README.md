@@ -191,6 +191,10 @@ requirejs.config({
 
 MIT
 
+## Code of Conduct
+
+[jQuery Foundation Code of Conduct](https://jquery.org/conduct/).
+
 ## Where are the tests?
 
 They are in the [requirejs](https://github.com/requirejs/requirejs) and
