@@ -1,5 +1,5 @@
 /**
- * @license text 2.0.14 Copyright jQuery Foundation and other contributors.
+ * @license text 2.0.15 Copyright jQuery Foundation and other contributors.
  * Released under MIT license, http://github.com/requirejs/text/LICENSE
  */
 /*jslint regexp: true */
@@ -40,7 +40,7 @@ define(['module'], function (module) {
     }
 
     text = {
-        version: '2.0.14',
+        version: '2.0.15',
 
         strip: function (content) {
             //Strips <?xml ...?> declarations so that external SVG and XML
