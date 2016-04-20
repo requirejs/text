@@ -17,7 +17,7 @@ define(['module'], function (module) {
         hasLocation = typeof location !== 'undefined' && location.href,
         defaultProtocol = hasLocation && location.protocol && location.protocol.replace(/\:/, ''),
         defaultHostName = hasLocation && location.hostname,
-        defaultPort = hasLocation && (location.port || undefined),
+        defaultPort = hasLocation && (location.port || (defaultProtocol === 'https' ? '443' : '80')),
         buildMap = {},
         masterConfig = (module.config && module.config()) || {};
 
