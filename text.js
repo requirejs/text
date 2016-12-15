@@ -7,7 +7,7 @@
   define, window, process, Packages,
   java, location, Components, FileUtils */
 
-define(['module'], function (module) {
+define('text', ['module'], function (module) {
     'use strict';
 
     var text, fs, Cc, Ci, xpcIsWindows,
