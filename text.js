@@ -11,7 +11,6 @@ define(['module'], function (module) {
     'use strict';
 
     var text, fs, Cc, Ci, xpcIsWindows,
-        progIds = ['Msxml2.XMLHTTP', 'Microsoft.XMLHTTP', 'Msxml2.XMLHTTP.4.0'],
         xmlRegExp = /^\s*<\?xml(\s)+version=[\'\"](\d)*.(\d)*[\'\"](\s)*\?>/im,
         bodyRegExp = /<body[^>]*>\s*([\s\S]+)\s*<\/body>/im,
         hasLocation = typeof location !== 'undefined' && location.href,
@@ -70,25 +69,7 @@ define(['module'], function (module) {
         },
 
         createXhr: masterConfig.createXhr || function () {
-            //Would love to dump the ActiveX crap in here. Need IE 6 to die first.
-            var xhr, i, progId;
-            if (typeof XMLHttpRequest !== "undefined") {
-                return new XMLHttpRequest();
-            } else if (typeof ActiveXObject !== "undefined") {
-                for (i = 0; i < 3; i += 1) {
-                    progId = progIds[i];
-                    try {
-                        xhr = new ActiveXObject(progId);
-                    } catch (e) {}
-
-                    if (xhr) {
-                        progIds = [progId];  // so faster next time
-                        break;
-                    }
-                }
-            }
-
-            return xhr;
+            return new XMLHttpRequest();
         },
 
         /**
