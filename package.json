@@ -17,5 +17,8 @@
     "license": "MIT",
     "volo": {
         "url": "https://raw.github.com/requirejs/text/{version}/text.js"
-    }
+    },
+    "files": [
+        "text.js"
+    ]
 }
