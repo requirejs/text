@@ -214,7 +214,7 @@ define(['module'], function (module) {
                 //by the module name + extension, but do not include the
                 //!strip part to avoid file system issues.
                 req([nonStripName], function (content) {
-                    text.finishLoad(parsed.moduleName + '.' + parsed.ext,
+                    text.finishLoad(parsed.moduleName,
                                     parsed.strip, content, onLoad);
                 });
             }
