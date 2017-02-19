@@ -187,6 +187,24 @@ requirejs.config({
 });
 ```
 
+### Post-Processing content
+
+The ``postProcessor`` attribute gives you the ability to define a function, that is called after the content was
+successfully loaded and stripped (if configured so). The function you define can either return a result or not.
+
+```javascript
+requirejs.config({
+    config: {
+        text: {
+            postProcessor: function (content) {
+                // ... doing your filtering, logging or something else
+                return newContent;
+            }
+        }
+    }
+});
+```
+
 ## License
 
 MIT

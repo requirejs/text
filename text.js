@@ -166,6 +166,15 @@ define(['module'], function (module) {
             if (masterConfig.isBuild) {
                 buildMap[name] = content;
             }
+            
+            var postProcessor = masterConfig.postProcessor;
+            if(!!postProcessor && (''+typeof(postProcessor)).toLowerCase() === 'function') {
+                var result = postProcessor(content);
+                if(!!result) {
+                    content = result;
+                }
+            }
+            
             onLoad(content);
         },
 
