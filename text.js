@@ -262,6 +262,7 @@ define(['module'], function (module) {
             process.versions &&
             !!process.versions.node &&
             !process.versions['node-webkit'] &&
+            !process.versions['electron'] &&
             !process.versions['atom-shell'])) {
         //Using special require.nodeRequire, something added by r.js.
         fs = require.nodeRequire('fs');
