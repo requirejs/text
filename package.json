@@ -1,6 +1,6 @@
 {
     "name": "text",
-    "version": "2.0.15",
+    "version": "2.0.16",
     "description": "An AMD loader plugin for loading text resources.",
     "categories": [
         "Loader plugins"
