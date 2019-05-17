@@ -332,11 +332,20 @@ define(['module'], function (module) {
             typeof Packages !== 'undefined' && typeof java !== 'undefined')) {
         //Why Java, why is this so awkward?
         text.get = function (url, callback) {
+            
+            //Support HTTP Resources
+            var inputStream = undefined;
+            if(url.toLowerCase().startsWith("http://")
+              ||url.toLowerCase().startsWith("https:")){
+              inputStream = new java.net.URL(url).openStream();
+            }else{
+              inputStream = new java.io.FileInputStream(url);
+            }
+
             var stringBuffer, line,
                 encoding = "utf-8",
-                file = new java.io.File(url),
                 lineSeparator = java.lang.System.getProperty("line.separator"),
-                input = new java.io.BufferedReader(new java.io.InputStreamReader(new java.io.FileInputStream(file), encoding)),
+                input = new java.io.BufferedReader(new java.io.InputStreamReader(inputStream, encoding)),
                 content = '';
             try {
                 stringBuffer = new java.lang.StringBuffer();
